@@ -45,10 +45,12 @@ export {
 };
 
 export const AVATAR =
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtc69JxHNcmN1ETpMUX4dozAgAN6iPjWalQ&usqp=CAU'; // Temp avatar
+  'http://domon.cn:80/content/images/2020/06/avatar_shiba-2.jpg'; // Temp avatar
 export const NAVS = [
-  { text: 'Blog', link: 'https://github.com/yihong0618/running_page' },
-  { text: 'About', link: 'https://github.com/yihong0618/running_page' },
+  { text: 'Blog', link: 'https://www.domon.cn' },
+  { text: 'Moment', link: 'https://t.me/s/hualihuawai' },
+  { text: 'Link-Exchange', link: 'https://domon.cn/link-exchange/' },
+  { text: 'About', link: 'https://www.domon.cn/about' },
 ];
 
 const nike = 'rgb(224,237,94)';
