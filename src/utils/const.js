@@ -45,7 +45,7 @@ export {
 };
 
 export const AVATAR =
-  'http://domon.cn:80/content/images/2020/06/avatar_shiba-2.jpg'; // Temp avatar
+  'https://domon.cn/content/images/2020/06/avatar_shiba-2.jpg'; // Temp avatar
 export const NAVS = [
   { text: 'Blog', link: 'https://www.domon.cn' },
   { text: 'Moment', link: 'https://t.me/s/hualihuawai' },
