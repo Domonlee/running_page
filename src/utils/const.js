@@ -10,8 +10,14 @@ const MUNICIPALITY_CITIES_ARR = [
   '澳门特别行政区',
 ];
 
+// styling: set to `true` if you want dash-line route
+const USE_DASH_LINE = true;
+// styling: route line opacity: [0, 1]
+const LINE_OPACITY = 0.4;
+
 // IF you outside China please make sure IS_CHINESE = false
 const IS_CHINESE = true;
+const USE_ANIMATION_FOR_GRID = false;
 const CHINESE_INFO_MESSAGE = (yearLength, year) =>
   `我用 App 记录自己跑步 ${yearLength} 年了，下面列表展示的是 ${year} 的数据`;
 const ENGLISH_INFO_MESSAGE = (yearLength, year) =>
@@ -48,6 +54,9 @@ export {
   IS_CHINESE,
   INFO_MESSAGE,
   RUN_TITLES,
+  USE_ANIMATION_FOR_GRID,
+  USE_DASH_LINE,
+  LINE_OPACITY,
 };
 
 export const AVATAR =
