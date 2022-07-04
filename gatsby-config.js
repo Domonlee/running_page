@@ -1,18 +1,22 @@
 module.exports = {
   pathPrefix: '/running_page', // Change to `/running_page` when running on github pages
   siteMetadata: {
-    siteTitle: 'Running Page',
-    siteUrl: 'https://yihong.run',
-    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtc69JxHNcmN1ETpMUX4dozAgAN6iPjWalQ&usqp=CAU',
-    description: 'Personal site and blog',
+    siteTitle: 'Dennis Running Page',
+    siteUrl: 'https://run.domon.cn',
+    logo: 'https://domon.cn/content/images/2020/06/avatar_shiba-2.jpg',
+    description: '日子有些沉闷，但跑起来强风会吹拂',
     navLinks: [
       {
         name: 'Blog',
-        url: 'https://yihong.run/running',
+        url: 'https://www.domon.cn',
+      },
+      {
+        name: 'Moment',
+        url: 'https://t.me/s/hualihuawai',
       },
       {
         name: 'About',
-        url: 'https://github.com/yihong0618/running_page/blob/master/README-CN.md',
+        url: 'https://www.domon.cn/about',
       },
     ],
   },
