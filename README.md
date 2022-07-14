@@ -21,6 +21,7 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 
 | Runner                                          | page                                         | App       |
 | ----------------------------------------------- | ---------------------------------------------|-----------|
+| [zhubao315](https://github.com/zhubao315)       | <https://zhubao315.github.io/running>        | Strava    |
 | [shaonianche](https://github.com/shaonianche)   | <https://run.duanfei.org>                    | Strava    |
 | [yihong0618](https://github.com/yihong0618)     | <https://yihong.run>                         | Nike      |
 | [superleeyom](https://github.com/superleeyom)   | <https://running.leeyom.top>                 | Nike      |
@@ -38,7 +39,7 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 | [lusuzi](https://github.com/lusuzi)             | <https://running.lusuzi.vercel.app>          | Nike      |
 | [wh1994](https://github.com/wh1994)             | <https://run4life.fun>                       | Garmin    |
 | [liuyihui](https://github.com/YiHui-Liu)        | <https://run.foolishfox.cn>                  | Keep      |
-| [FrankSun](https://github.com/hi-franksun)      | <https://hi-franksun.github.io/running_page> | Nike      |
+| [sunyunxian](https://github.com/sunyunxian)     | <https://sunyunxian.github.io/running_page>  | Strava    |
 | [AhianZhang](https://github.com/AhianZhang)     | <https://running.ahianzhang.com>             | Nike      |
 | [L1cardo](https://github.com/L1cardo)           | <https://run.licardo.cn>                     | Nike      |
 | [luckylele666](https://github.com/luckylele666) | <https://0000928.xyz>                        | Strava    |
@@ -77,8 +78,10 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 - **[Nike Run Club](#nike-run-club)**
 - **[Strava](#strava)**
 - **[GPX](#GPX)**
+- **[TCX](#TCX)**
 - **[Nike_to_Strava(Using NRC Run, Strava backup data)](#Nike_to_Strava)**
-- **[Strava_to_Garmin(Using Strava Run, Garmin backup data)](#)**
+- **[Tcx_to_Strava(upload all tcx data to strava)](#TCX_to_Strava)**
+- **[Garmin+Strava(Using Garmin Run, Strava backup data)](#garminstrava)**
 
 ## Download
 
@@ -88,7 +91,7 @@ Clone or fork the repo.
 git clone https://github.com/yihong0618/running_page.git --depth=1
 ```
 
-## Installation and testing (node >= 12 and <= 14 python >= 3.6)
+## Installation and testing (node >= 12 and <= 14 python >= 3.7)
 
 ```
 pip3 install -r requirements.txt
@@ -180,12 +183,27 @@ python3(python) scripts/gpx_sync.py
 
 </details>
 
+### TCX
+
+<details>
+<summary>Make your <code>TCX</code> data</summary>
+<br>
+
+Copy all your tcx files to TCX_OUT or new tcx files
+
+```python
+python3(python) scripts/tcx_sync.py
+```
+
+</details>
+
 ### Garmin
 
 <details>
 <summary>Get your <code>Garmin</code> data</summary>
 <br>
 If you only want to sync `type running` add args --only-run
+If you only want `tcx` files add args --tcx 
 
 ```python
 python3(python) scripts/garmin_sync.py ${your email} ${your password}
@@ -210,6 +228,8 @@ python3(python) scripts/garmin_sync.py example@gmail.com example --only-run
 <details>
 <summary>Get your <code>Garmin-CN</code> data</summary>
 <br>
+If you only want to sync `type running` add args --only-run
+If you only want `tcx` files add args --tcx
 
 ```python
 python3(python) scripts/garmin_sync.py ${your email} ${your password} --is-cn
@@ -339,6 +359,29 @@ References：
 
 </details>
 
+
+### TCX_to_Strava
+
+<details>
+<summary>upload all tcx files to strava</summary>
+
+<br>
+
+1. follow the strava steps
+2. Execute in the root directory:
+
+```python
+python3(python) scripts/tcx_to_strava_sync.py ${client_id} ${client_secret}  ${strava_refresch_token}
+```
+
+example：
+
+```python
+python3(python) scripts/tcx_to_strava_sync.py xxx xxx xxx
+```
+
+</details>
+
 ### Nike_to_Strava
 
 <details>
@@ -360,6 +403,26 @@ python3(python) scripts/nike_to_strava_sync.py eyJhbGciThiMTItNGIw******  xxx xx
 ```
 
 </details>
+
+### Garmin+Strava
+
+<details>
+<summary>Get your <code>Garmin</code> data and upload to strava</summary>
+
+<br>
+
+1. finish garmin and strava setps
+2. Execute in the root directory:
+
+```python
+python3(python) scripts/garmin_to_strava_sync.py  ${client_id} ${client_secret} ${strava_refresch_token} ${garmin_email} ${garmin_password} --is-cn
+```
+e.g.
+
+```python
+python3(python) scripts/garmin_to_strava_sync.py  xxx xxx xxx xx xxx
+```
+
 
 ### Total Data Analysis
 
@@ -490,7 +553,6 @@ The following steps need to be taken
 Before submitting PR:
 
 - Format Python code with `black` (`black .`)
-- Format Python code with `isort` (`isort --profile black  **/**/*.py`)
 
 # Special thanks
 
