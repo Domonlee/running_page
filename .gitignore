@@ -3,6 +3,8 @@
 *.pyc
 node_modules
 yarn-error.log
+./venv/*
+/venv/*
 
 /public
 # Build directory
