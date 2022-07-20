@@ -1,0 +1,1 @@
+python3 ./scripts/garmin_to_strava.py 89224 848f34b4b9200e10ee95e34340fce01add033055 2f12478a985136d1b6a96c462a311b0bc0846164 viplizhao@163.com K50Fa1F7Qwsxx3XpP --is-cn
