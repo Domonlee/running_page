@@ -2,6 +2,7 @@ import * as mapboxPolyline from '@mapbox/polyline';
 import gcoord from 'gcoord';
 import { WebMercatorViewport } from 'react-map-gl'
 import { chinaGeojson } from '../static/run_countries';
+import { chinaCities } from '../static/city';
 import { MUNICIPALITY_CITIES_ARR, NEED_FIX_MAP, RUN_TITLES } from './const';
 
 const titleForShow = (run) => {
@@ -24,17 +25,27 @@ const formatPace = (d) => {
   const pace = (1000.0 / 60.0) * (1.0 / d);
   const minutes = Math.floor(pace);
   const seconds = Math.floor((pace - minutes) * 60.0);
-  return `${minutes}:${seconds.toFixed(0).toString().padStart(2, '0')}`;
+  return `${minutes}'${seconds.toFixed(0).toString().padStart(2, '0')}"`;
 };
 
-const formatRunTime = (distance,pace) => {
-  if (Number.isNaN(distance) || Number.isNaN(pace)) {
-    return '0min';
+const convertMovingTime2Sec = (moving_time) => {
+  if (!moving_time) {
+    return 0;
   }
-  const formatPace = (1000.0 / 60.0) * (1.0 / pace);
-  const minutes = Math.floor(formatPace * distance);
+  // moving_time : '2 days, 12:34:56' or '12:34:56';
+  const splits = moving_time.split(', ');
+  const days = splits.length == 2 ? parseInt(splits[0]) : 0;
+  const time = splits.splice(-1)[0]
+  const [hours, minutes, seconds] = time.split(':').map(Number);
+  const totalSeconds = (((days * 24) + hours) * 60 + minutes) * 60 + seconds;
+  return totalSeconds;
+}
+
+const formatRunTime = (moving_time) => {
+  const totalSeconds = convertMovingTime2Sec(moving_time)
+  const seconds = totalSeconds % 60
+  const minutes = (totalSeconds-seconds) / 60
   if (minutes === 0) {
-    const seconds = Math.floor((formatPace * distance - minutes) * 60.0);
     return seconds + 's';
   }
   return minutes + 'min';
@@ -47,16 +58,34 @@ const scrollToMap = () => {
   window.scroll(rect.left + window.scrollX, rect.top + window.scrollY);
 };
 
+const cities = chinaCities.map((c) => c.name);
 // what about oversea?
 const locationForRun = (run) => {
-  const location = run.location_country;
+  let location = run.location_country;
   let [city, province, country] = ['', '', ''];
   if (location) {
     // Only for Chinese now
-    const cityMatch = location.match(/[\u4e00-\u9fa5]*(市|自治州)/);
-    const provinceMatch = location.match(/[\u4e00-\u9fa5]*(省|自治区)/);
+    // should fiter 臺灣
+    if(location.indexOf('臺灣') > -1){
+      const taiwan = '台湾';
+      location = location.replace('臺灣', taiwan);
+      const _locArr = location.split(',').map(item=>item.trim());
+      const _locArrLen = _locArr.length;
+      // directly repalce last item with 中国
+      _locArr[_locArrLen-1] = '中国';
+      // if location not contain '台湾省', insert it before zip code(posistion is _locArrLen-2)
+      if(_locArr.indexOf(`${taiwan}省`) === -1){
+        _locArr.splice(_locArrLen-2, 0, `${taiwan}省`)
+      }
+      location = _locArr.join(',');
+    }
+    const cityMatch = location.match(/[\u4e00-\u9fa5]{2,}(市|自治州)/);
+    const provinceMatch = location.match(/[\u4e00-\u9fa5]{2,}(省|自治区)/);
     if (cityMatch) {
       [city] = cityMatch;
+      if (!cities.includes(city)) {
+        city = ''
+      }
     }
     if (provinceMatch) {
       [province] = provinceMatch;
@@ -222,4 +251,5 @@ export {
   sortDateFuncReverse,
   getBoundsForGeoData,
   formatRunTime,
+  convertMovingTime2Sec,
 };
