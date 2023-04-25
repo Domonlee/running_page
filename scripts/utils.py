@@ -1,4 +1,5 @@
 import json
+import time
 from datetime import datetime
 
 import pytz
@@ -9,6 +10,7 @@ except:
     pass
 from generator import Generator
 from stravalib.client import Client
+from stravalib.exc import RateLimitExceeded
 
 
 def adjust_time(time, tz_name):
@@ -19,6 +21,29 @@ def adjust_time(time, tz_name):
 def adjust_time_to_utc(time, tz_name):
     tc_offset = datetime.now(pytz.timezone(tz_name)).utcoffset()
     return time - tc_offset
+
+
+def adjust_timestemp_to_utc(timestemp, tz_name):
+    tc_offset = datetime.now(pytz.timezone(tz_name)).utcoffset()
+    delta = int(tc_offset.total_seconds())
+    return int(timestemp) - delta
+
+
+def to_date(ts):
+    # TODO use https://docs.python.org/3/library/datetime.html#datetime.datetime.fromisoformat
+    # once we decide to move on to python v3.7+
+    ts_fmts = ["%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M:%S.%f"]
+
+    for ts_fmt in ts_fmts:
+        try:
+            # performance with using exceptions
+            # shouldn't be an issue since it's an offline cmdline tool
+            return datetime.strptime(ts, ts_fmt)
+        except ValueError:
+            print("Error: Can not execute strptime")
+            pass
+
+    raise ValueError(f"cannot parse timestamp {ts} into date with fmts: {ts_fmts}")
 
 
 def make_activities_file(sql_file, data_dir, json_file, file_suffix="gpx"):
@@ -46,6 +71,8 @@ def get_strava_last_time(client, is_milliseconds=True):
     try:
         activity = None
         activities = client.get_activities(limit=10)
+        activities = list(activities)
+        activities.sort(key=lambda x: x.start_date, reverse=True)
         # for else in python if you don't know please google it.
         for a in activities:
             if a.type == "Run":
@@ -65,11 +92,15 @@ def get_strava_last_time(client, is_milliseconds=True):
 
 def upload_file_to_strava(client, file_name, data_type):
     with open(file_name, "rb") as f:
-        r = client.upload_activity(activity_file=f, data_type=data_type)
         try:
-            r.wait()
-            print(file_name)
-            print("===== waiting for upload ====")
-            print(r.status, f"strava id: {r.activity_id}")
-        except Exception as e:
-            print(str(e))
+            r = client.upload_activity(activity_file=f, data_type=data_type)
+        except RateLimitExceeded as e:
+            timeout = e.timeout
+            print()
+            print(f"Strava API Rate Limit Exceeded. Retry after {timeout} seconds")
+            print()
+            time.sleep(timeout)
+            r = client.upload_activity(activity_file=f, data_type=data_type)
+        print(
+            f"Uploading {data_type} file: {file_name} to strava, upload_id: {r.upload_id}."
+        )
