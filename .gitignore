@@ -7,9 +7,9 @@ yarn-error.log
 ./venv/*
 /venv/*
 
-/public
 # Build directory
 /build
+/dist
 .DS_Store
 .sass-cache/
 _posts/
@@ -21,3 +21,4 @@ _site/
 .idea
 
 config.yaml
+.venv/
