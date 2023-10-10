@@ -92,5 +92,6 @@ export const NAVS = [
 ];
 
 const nike = 'rgb(224,237,94)';
+export const NEED_FIX_MAP = false;
 export const MAIN_COLOR = nike;
 export const PROVINCE_FILL_COLOR = '#47b8e0';
