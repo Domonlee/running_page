@@ -110,10 +110,9 @@ jobs:
       - name: Run sync Garmin script
         if: env.RUN_TYPE == 'garmin'
         run: |
-          # make garimin secret string `python run_page/get_garmin_secret.py ${email} ${password}
-          python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING }}
+          python scripts/garmin_sync.py ${{ secrets.GARMIN_EMAIL }} ${{ secrets.GARMIN_PASSWORD }}
         # If you only want to sync `type running` add args --only-run, default script is to sync all data (rides and runs).
-        # python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING }} --only-run
+        # python scripts/garmin_sync.py ${{ secrets.GARMIN_EMAIL }} ${{ secrets.GARMIN_PASSWORD }} --only-run
 
       - name: Run sync Garmin CN script
         if: env.RUN_TYPE == 'garmin_cn'
@@ -185,3 +184,4 @@ jobs:
         run: |
           echo "SAVE_DATA_IN_GITHUB_CACHE=${{ env.SAVE_DATA_IN_GITHUB_CACHE }}" >> "$GITHUB_OUTPUT"
           echo "DATA_CACHE_PREFIX=${{ env.DATA_CACHE_PREFIX }}" >> "$GITHUB_OUTPUT"
+          echo "BUILD_GH_PAGES=${{ env.BUILD_GH_PAGES }}" >> "$GITHUB_OUTPUT"

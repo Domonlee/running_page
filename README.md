@@ -398,7 +398,8 @@ python3(python) run_page/nike_sync.py eyJhbGciThiMTItNGIw******
 <br>
 
 ![My API Application](https://raw.githubusercontent.com/shaonianche/gallery/master/running_page/strava_settings_api.png)
-Created successfully：
+
+Created successfully:
 
 <br>
 
